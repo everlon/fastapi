@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "bevi-products"
+version = "0.1.0"
+description = ""
+authors = ["Everlon Passos <dev@everlon.com.br>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.12.*"
+fastapi = {extras = ["standard"], version = "^0.115.4"}
+sqlalchemy = "^2.0.36"
+sqlite4 = "^0.1.1"
+alembic = "^1.14.0"
+pymongo = "^4.10.1"
+pydantic = "^2.9.2"
+pyjwt = "^2.9.0"
+passlib = "^1.7.4"
+bcrypt = "^4.2.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
+pytest-cov = "^6.0.0"
+
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = '-p no:warnings'
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

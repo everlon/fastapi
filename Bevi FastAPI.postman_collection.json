@@ -1,0 +1,554 @@
+{
+	"info": {
+		"_postman_id": "5fc92365-72d6-42e2-a8b3-63397deca928",
+		"name": "Bevi FastAPI",
+		"description": "Desenvolvimento de API CRUD de Produtos em Python para a Bevi.\n\nVocê poderá ter maiores informações em:\n\n- [http://localhost:8000/api/v1/docs](http://localhost:8000/api/v1/docs#/)\n    \n- [http://localhost:8000/api/v1/redoc](http://localhost:8000/api/v1/redoc#tag/auth/operation/read_users_me_api_v1_auth_users_me__get)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4082674"
+	},
+	"item": [
+		{
+			"name": "Hello",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required Content-Type header with value application/json\", function () {",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Message is a non-empty string\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData).to.be.an('object');",
+							"  pm.expect(responseData.message).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Message field should be of type string\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.message).to.be.a('string');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Ensure that the response does not contain any additional unexpected fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object').and.to.not.include.any.keys(\"unexpectedField\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						""
+					]
+				},
+				"description": "Mensagens de boas vindas."
+			},
+			"response": []
+		},
+		{
+			"name": "Create Product",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 201\", function () {",
+							"    pm.expect(pm.response.code).to.equal(201);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData).to.have.property('name');",
+							"    pm.expect(responseData).to.have.property('description');",
+							"    pm.expect(responseData).to.have.property('price');",
+							"    pm.expect(responseData).to.have.property('status');",
+							"    pm.expect(responseData).to.have.property('stock_quantity');",
+							"    pm.expect(responseData).to.have.property('id');",
+							"    pm.expect(responseData).to.have.property('active');",
+							"    pm.expect(responseData).to.have.property('created_at');",
+							"    pm.expect(responseData).to.have.property('updated_at');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Price is a non-negative number\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData.price).to.be.a('number');",
+							"    pm.expect(responseData.price).to.be.at.least(0, \"Price should be a non-negative number\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Stock_quantity is a non-negative integer\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData.stock_quantity).to.be.a('number');",
+							"  pm.expect(responseData.stock_quantity).to.be.at.least(0, \"Stock_quantity should be a non-negative integer\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Novo produto para cadastro\",\n  \"description\": \"Descrição do produto com detalhe.\",\n  \"price\": 99.9,\n  \"status\": \"em estoque\",\n  \"stock_quantity\": 100\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/v1/products",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"products"
+					]
+				},
+				"description": "Neste endpoint será para criar o Produto. Será passado pelo \"body\" os campos em JSON: _\"name\": str, \"description\": str, \"price\": float, \"status\": 'em estoque', 'em reposição' ou 'em falta', \"stock_quantity\": int_"
+			},
+			"response": []
+		},
+		{
+			"name": "List Products",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields - name, description, and price\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.products).to.be.an('array');",
+							"    ",
+							"    responseData.products.forEach(function(product) {",
+							"        pm.expect(product).to.have.property('name');",
+							"        pm.expect(product).to.have.property('description');",
+							"        pm.expect(product).to.have.property('price');",
+							"    });",
+							"});",
+							"",
+							"",
+							"pm.test(\"Total number of products is a non-negative integer\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData.total).to.be.a('number');",
+							"    pm.expect(responseData.total).to.be.at.least(0);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Page number is a non-negative integer\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData).to.be.an('object');",
+							"  pm.expect(responseData.page).to.be.a('number');",
+							"  pm.expect(responseData.page).to.satisfy((page) => page >= 0, \"Page number should be a non-negative integer\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Total pages is a non-negative integer\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData).to.be.an('object');",
+							"  pm.expect(responseData.total_pages).to.be.a('number').and.to.satisfy((val) => val >= 0, \"Total pages must be a non-negative integer\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJldmVybG9uIiwiZXhwIjoxNzMxMzUyMDE3fQ.-znaktVLB861XKMcEcEn7ss-ckWIDZAP7JIFjMT3P0U",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/api/v1/products/?page=1&page_size=25&search=&status=",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"products",
+						""
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "page_size",
+							"value": "25"
+						},
+						{
+							"key": "search",
+							"value": ""
+						},
+						{
+							"key": "status",
+							"value": ""
+						}
+					]
+				},
+				"description": "Neste endpoint será paginado e será possível colocar PAGE para o número da página, PAGE_SIZE para limitar o tamanho da lista. \n\nEm SEARCH você poderá procurar termos para ser buscado no Nome do Produto e na Descrição. \n\nJá em STATUS pode se filtrar como: 'em estoque', 'em reposição' e 'em falta'."
+			},
+			"response": []
+		},
+		{
+			"name": "Update Product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJldmVybG9uIiwiZXhwIjoxNzMxMzUyMDE3fQ.-znaktVLB861XKMcEcEn7ss-ckWIDZAP7JIFjMT3P0U",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Produto para alteração\",\n  \"description\": \"Descrição do produto alterado mas com menos com detalhe.\",\n  \"price\": 9.9,\n  \"status\": \"em estoque\",\n  \"stock_quantity\": 10\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/v1/products/13",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"products",
+						"13"
+					]
+				},
+				"description": "Neste endpoint será para atualizar os dados do Produto, não precisando informar todos os campos mas somente aqueles que queira atualizar."
+			},
+			"response": []
+		},
+		{
+			"name": "Get Product by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData).to.have.property('name');",
+							"    pm.expect(responseData).to.have.property('description');",
+							"    pm.expect(responseData).to.have.property('price');",
+							"    pm.expect(responseData).to.have.property('status');",
+							"    pm.expect(responseData).to.have.property('stock_quantity');",
+							"    pm.expect(responseData).to.have.property('id');",
+							"    pm.expect(responseData).to.have.property('active');",
+							"    pm.expect(responseData).to.have.property('created_at');",
+							"    pm.expect(responseData).to.have.property('updated_at');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Price is a non-negative number\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData.price).to.be.a('number');",
+							"    pm.expect(responseData.price).to.be.at.least(0);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Stock quantity is a non-negative integer\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.stock_quantity).to.exist.and.to.be.a('number');",
+							"    pm.expect(responseData.stock_quantity).to.be.at.least(0, \"Stock quantity should be non-negative\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Verify that the 'created_at' field is in a valid date format\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData.created_at).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$/, \"Date format should be valid\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJldmVybG9uIiwiZXhwIjoxNzMxMzU1NDcxfQ.SnIwCRvhbEu3WQVn7Ym8JvmwJdcHqfncb1m_tUu6vds",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/api/v1/products/13",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"products",
+						"13"
+					]
+				},
+				"description": "Neste endpoint será exibido TODAS as informações do Produto indicado pelo ID. Assim como as informações de LOG de quando este produto foi exibido na listagem de busca."
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Product",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 400\", function () {",
+							"    pm.expect(pm.response.code).to.equal(400);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content type is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required field 'detail'\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.detail).to.exist;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Detail is a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.detail).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Detail should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Verify product with ID 3 still exists after delete request\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.detail).to.exist;",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/api/v1/products/1",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"products",
+						"1"
+					]
+				},
+				"description": "Neste endpoint será para excluir o produto desejado, informando o ID.\n\n_ID required_"
+			},
+			"response": []
+		},
+		{
+			"name": "Login for Access Token",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "secret",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "everlon",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "everlon",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "secret",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/v1/auth/token",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"token"
+					]
+				},
+				"description": "Endpoit para logar com usuário e senha e obter retorno de uma chave de acesso (token)."
+			},
+			"response": []
+		},
+		{
+			"name": "Read Users Me",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJldmVybG9uIiwiZXhwIjoxNzMxMzUyMDE3fQ.-znaktVLB861XKMcEcEn7ss-ckWIDZAP7JIFjMT3P0U",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/api/v1/auth/users/me",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"users",
+						"me"
+					]
+				},
+				"description": "Neste endpoint você obterá as informações do usuário da chave de acesso em vigor."
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "http://localhost:8000",
+			"type": "string"
+		}
+	]
+}

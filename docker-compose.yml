@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  bevi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGO_DB_URL=mongodb://root:pwd@mongodb:27017
+    depends_on:
+      - mongodb
+    volumes:
+      - .:/bevi
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: pwd
+
+volumes:
+  mongodb_data:
+    driver: local
